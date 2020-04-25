@@ -18,9 +18,10 @@ class TweetBot():
     def getKeys(self, filename):
         self.keys = {}
         with open(filename, 'r') as f:
-            lines = [line.rstrip().split(" ") for line in f]
-            for line in lines:
+            for line in f:
+                line = line.rstrip().split(" ")
                 self.keys[line[0][:-1]] = line[1]
+
 
     def auth(self):
         auth = tweepy.OAuthHandler(self.keys["CONSUMER_KEY"],
