@@ -6,4 +6,5 @@ services:
       dockerfile: dailies.Dockerfile
     image: dailies
     volumes:
-      - ${PWD}:/usr/src/app/
+      - ${PWD}:/home
+    command: python3 daily.py

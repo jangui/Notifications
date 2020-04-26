@@ -1,1 +1,7 @@
-docker-compose -f dailies.yml up
+#using docker compose
+#docker-compose -f dailies.yml up
+
+#using docker
+#leaving in the build command
+#docker build -f dailies.Dockerfile -t dailies .
+docker run -it --mount "type=bind,source=$(pwd),target=/home/" --rm --name dailies dailies

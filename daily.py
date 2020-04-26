@@ -8,7 +8,7 @@ keyfile = "my_keys"
 bdayfile = "birthdays"
 
 def main():
-    bot = Tweetbot(keyfile)
+    bot = TweetBot(keyfile)
     bot.delete_tweets()
     tweetBirthdays(bot, bdayfile)
 
