@@ -1,0 +1,2 @@
+docker build -f dailyDockerfile -t dailies .
+docker run -it --rm --name dailies dailies
