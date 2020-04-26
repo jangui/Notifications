@@ -1,2 +1,5 @@
-docker build -f dailyDockerfile -t dailies .
+#leaving in the build command
+#don't forget to rebuild after updating files!
+#docker build -f dailyDockerfile -t dailies .
+
 docker run -it --rm --name dailies dailies
