@@ -1,0 +1,9 @@
+version: '3'
+services:
+  dailies:
+    build:
+      context: .
+      dockerfile: dailies.Dockerfile
+    image: dailies
+    volumes:
+      - ${PWD}:/usr/src/app/

@@ -31,7 +31,10 @@ class TweetBot():
         self.api = tweepy.API(auth)
 
     def tweet(self, message):
-        self.api.update_status(message)
+        try:
+            self.api.update_status(message)
+        except:
+            print("Failed to tweet:", message)
 
     def delete_tweets(self):
         timeline = tweepy.Cursor(self.api.user_timeline).items()

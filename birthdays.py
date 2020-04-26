@@ -1,8 +1,6 @@
-from TweetBot import TweetBot
 from datetime import datetime
 
-def tweetBirthdays(keyfile, bdayfile):
-    t = TweetBot(keyfile)
+def tweetBirthdays(bot, bdayfile):
     birthdays = getBirthdays(bdayfile)
     for k, v in birthdays.items():
         if v[2] == "0000":
@@ -19,7 +17,7 @@ def tweetBirthdays(keyfile, bdayfile):
             msg = "Today is " + k + "'s birthday!"
             if age:
                 msg += " (" + str(age) + ")"
-            t.tweet(msg)
+            bot.tweet(msg)
 
 def getBirthdays(filename):
     bd = {}
