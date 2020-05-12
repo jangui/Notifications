@@ -33,7 +33,8 @@ class TweetBot():
     def tweet(self, message):
         try:
             self.api.update_status(message)
-        except:
+        except Exception as e:
+            print(e)
             print("Failed to tweet:", message)
 
     def delete_tweets(self):
