@@ -1,6 +1,3 @@
-# Name LastName DD/MM/YYYY
-# set year to 0000 to exclude
-# set lastname as '.' to exclude
 Mom . 14/06/1966
 Jorge . 30/04/1997
 Monika . 21/11/1969
@@ -9,28 +6,28 @@ Inma . 14/05/1964
 Abuela . 12/05/1929
 Abuelo . 09/08/1931
 Christine . 06/10/1998
-Ian . 14/10/1998
-Chimmy . 17/03/1999
+Ian Pessagno 14/10/1998
+Tommy Acin 17/03/1999
 Danny Torres 14/05/1999
 John Cunniff 12/02/1999
-Sai . 20/12/1997
-#Kyle Martin
+Sai Vegasena 20/12/1997
+Kyle Martin  10/03/0000
 Nick Creus 22/05/1999
-Ignacio . 03/11/1999
-Javi . 02/11/1998
+Ignacio Calvera Maldonado 03/11/1999
+Javi Madero 02/11/1998
 Danny Stackhouse 02/05/1999
-Joaco . 02/12/1998
-Anush . 28/09/1998
-Fede . 28/02/1999
-Willem . 26/01/1999
-Leon . 30/01/1999
-David . 27/06/1998
-Diego . 26/08/1998
-Hannah . 12/04/1999
+Joaco Chumaceiro 02/12/1998
+Anush Shah 28/09/1998
+Fede Gonzales Bereciartua 28/02/1999
+Willem Lloriga 26/01/1999
+Leon Sierra 30/01/1999
+David Najera 27/06/1998
+Diego Ortiz 26/08/1998
+Hannah Sullivan 12/04/1999
 Kristi Sullivan 04/10/0000
 Daniel Mochales 10/02/0000
 Banki B 08/10/1998
-Pucho . 18/09/1998
+Jorge Urribari 18/09/1998
 Camila Borjesson 14/09/0000
 Lucia Moreau 26/01/2000
 Alex Ravioli 17/03/1999
@@ -39,8 +36,8 @@ Lucas Bacariza 03/04/0000
 #Natalia Bacariza
 Gabe Fraga 21/06/1999
 Bojan . 22/12/0000
-Janae . 20/07/1999
-Saritah . 17/09/1999
-Vinanti . 13/06/1999
-Sophie Potugal 13/05/1999
+Janae Isaacs 20/07/1999
+Sarah Brys . 17/09/1999
+Vinanti Kamath 13/06/1999
+Sofia Machado Lopes 13/05/1999
 Bruce . 26/06/0000
