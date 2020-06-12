@@ -1,4 +1,4 @@
-from app import db
+from .app import db
 
 class Birthday(db.Model):
     def __init__(self, **kwargs):

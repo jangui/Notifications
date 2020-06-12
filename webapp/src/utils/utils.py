@@ -1,6 +1,6 @@
 from datetime import datetime
-from models import Birthday
-from app import db
+from ..models import Birthday
+from ..app import db
 
 def tweetBirthdays():
     birthdays = Birthday.query.filter_by(

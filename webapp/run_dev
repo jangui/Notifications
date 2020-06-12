@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -xe
+
+python3 db.py
+env FLASK_APP=dev.py flask run
