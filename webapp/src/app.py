@@ -8,6 +8,9 @@ app.config.from_object(Config())
 
 db = SQLAlchemy(app)
 
+from .routes import private
+
+app.register_blueprint(private)
 
 @app.route('/', methods=['GET', 'POST'])
 def hello():
