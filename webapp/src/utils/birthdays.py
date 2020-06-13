@@ -30,3 +30,15 @@ def add_birthday(first_name, last_name, day, month, year):
                  )
     db.session.add(bd)
     db.session.commit()
+
+def update_birthday(first_name, last_name, day, month, year):
+    bd = Birthday.query.filter_by(first_name=first_name, last_name=last_name).first()
+    bd.day = day
+    bd.month = month
+    bd.year = year
+    db.session.commit()
+
+def delete_birthday(first_name, last_name):
+    bd = Birthday.query.filter_by(first_name=first_name, last_name=last_name).first()
+    db.session.delete(bd)
+    db.session.commit()

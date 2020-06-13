@@ -1,5 +1,5 @@
-from flask import Blueprint, jsonify
-from ..utils import get_birthdays, TweetBot
+from flask import Blueprint, jsonify, request
+from ..utils import get_birthdays, TweetBot, add_birthday, update_birthday, delete_birthday
 from datetime import datetime
 
 private = Blueprint('private', __name__, url_prefix='/private')
@@ -18,6 +18,7 @@ def tweet_birthdays():
 
 @private.route('/tweet/ping', methods=['POST'])
 def ping():
+    print(request.json)
     time = str(datetime.now())
     keyfile = "../data/keys"
     bot = TweetBot(keyfile)
@@ -31,3 +32,67 @@ def delete():
     bot.delete_tweets()
     return "success!"
 
+@private.route('/birthdays/add', methods=['POST'])
+def add_bd():
+    """
+    payload should be json in the form:
+    {
+        first_name: str
+        last_name: str (omit last name using empty string)
+        day: int
+        month: int
+        year: int (omit birth year using -1)
+    }
+
+    """
+    payload = request.json
+    print(payload)
+    if payload['year'] == "":
+        payload['year'] = None
+    add_birthday(
+                    payload['first_name'],
+                    payload['last_name'],
+                    payload['day'],
+                    payload['month'],
+                    payload['year']
+                )
+    return 'succes!'
+
+
+@private.route('/birthdays/delete', methods=['POST'])
+def delete_bd():
+    """
+    payload should be json in the form:
+    {
+        first_name: str
+        last_name: str
+    }
+    """
+    payload = request.json
+    delete_birthday(payload['first_name'], payload['last_name'])
+    return 'success!'
+
+@private.route('/birthdays/update', methods=['POST'])
+def update_bd():
+    """
+    payload should be json in the form:
+    {
+        first_name: str
+        last_name: str (omit last name using empty string)
+        day: int
+        month: int
+        year: int (omit birth year using empty string)
+    }
+
+    """
+    payload = request.json
+    if payload['year'] == "":
+        payload['year'] = None
+    update_birthday(
+                        payload['first_name'],
+                        payload['last_name'],
+                        payload['day'],
+                        payload['month'],
+                        payload['year']
+                    )
+    return 'success!'
