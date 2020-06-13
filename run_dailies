@@ -1,5 +1,0 @@
-#!/bin/zsh
-
-#docker build -f dailies.Dockerfile -t dailies .
-docker run --rm --name dailies dailies
-
