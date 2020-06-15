@@ -1,6 +1,19 @@
 version: '3.7'
 
 services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.2
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
   db:
     build: db
     restart: always
@@ -9,6 +22,9 @@ services:
       - "127.0.0.1:3306:3306"
     environment:
       - "MYSQL_ROOT_PASSWORD=password"
-      - "MYSQL_DATABASE=alerts"
+      - "MYSQL_DATABASE=notifications"
     volumes:
       - "./data/db:/var/lib/mysql"
+  api:
+    build: api
+    restart: always
