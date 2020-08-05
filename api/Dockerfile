@@ -13,4 +13,4 @@ USER api
 
 COPY . .
 
-CMD ./run_prod
+CMD ./run_hello_world

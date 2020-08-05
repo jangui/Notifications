@@ -2,18 +2,41 @@ version: '3.7'
 
 services:
   reverse-proxy:
-    # The official v2 Traefik docker image
     image: traefik:v2.2
     # Enables the web UI and tells Traefik to listen to docker
-    command: --api.insecure=true --providers.docker
+    command:
+      #enable web ui
+      - "--api.insecure=true"
+      #set docker as provider
+      - "--providers.docker"
+      #polling provider interval 
+      - "--providersThrottleDuration: 10s"
+      - "--providers.docker.watch"
+      #only expose containers with 'traefik.enable=true' label
+      - "--providers.docker.exposedbydefault=false"
+      #define entry points
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      #redirrect http to https
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      #ACME (Let's Encrypt) auto SSL
+      - "--certificatesresolvers.leresolver.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.leresolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.leresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+#     - "--certificatesresolvers.leresolver.acme.tlschallenge=true"
     ports:
-      # The HTTP port
       - "80:80"
-      # The Web UI (enabled by --api.insecure=true)
+      - "443:443"
+      # Traefik web UI
       - "8080:8080"
     volumes:
-      # So that Traefik can listen to the Docker events
-      - /var/run/docker.sock:/var/run/docker.sock
+      # allow Traefik to listen on docker socket 
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      # Lets Encrypt 
+      - "data/letsencrypt:/letsencrypt"
+
   db:
     build: db
     restart: always
@@ -25,6 +48,23 @@ services:
       - "MYSQL_DATABASE=notifications"
     volumes:
       - "./data/db:/var/lib/mysql"
+    labels:
+      #disable traekfik auto discovery
+      - "traefik.enable=false"
   api:
     build: api
     restart: always
+    labels:
+        #enable traefik auto discovery
+      - "traefik.enable=true"
+        #entry point for router
+      - "traefik.http.routers.api.entrypoints=https"
+        #rule which router will route requests from
+      - "traefik.http.routers.api.rule=Host(`notifications.${DOMAIN}`)"
+        #enable tls for router
+      - "traefik.http.routers.api.tls=true"
+        #specify cert resolver for router
+      - "traefik.http.routers.api.tls.certresolver=leresolver"
+        #tell service which port (in container) to route trafic to
+      - "traefik.http.services.api.loadbalancer.server.port=5000"
+        
