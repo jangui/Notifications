@@ -1,51 +1,53 @@
 version: '3.7'
-
 services:
-  reverse-proxy:
+  traefik:
     image: traefik:v2.2
-    # Enables the web UI and tells Traefik to listen to docker
     command:
-      #enable web ui
+      # enable web ui
       - "--api.insecure=true"
-      #set docker as provider
-      - "--providers.docker"
-      #polling provider interval 
-      #- "--providersThrottleDuration: 10s"
-      #- "--providers.docker.watch"
+      # set provider to docker
+      - "--providers.docker=true"
       #only expose containers with 'traefik.enable=true' label
       - "--providers.docker.exposedbydefault=false"
-      #define entry points
-      - "--entrypoints.web.address=:80"
+      # set entrypoints
+      - "--entryPoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      #redirrect http to https
-      #- "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      #- "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-      #ACME (Let's Encrypt) auto SSL
-      - "--certificatesresolvers.leresolver.acme.email=jaimitino@gmail.com"
-      - "--certificatesresolvers.leresolver.acme.storage=acme.json"
-      - "--certificatesresolvers.leresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.leresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.leresolver.acme.httpchallenge.entrypoint=web"
+      # ACME (Let's Encrypt) auto SSL
+      - "--certificatesResolvers.leresolver.acme.email=${ACME_EMAIL}"
+      - "--certificatesResolvers.leresolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesResolvers.leresolver.acme.tlsChallenge=true"
+        #- "--certificatesResolvers.leresolver.acme.httpChallenge=true"
+        #- "--certificatesResolvers.leresolver.acme.httpChallenge.entryPoint=web"
     restart: always
     ports:
       - "80:80"
       - "443:443"
-      # Traefik web UI
-      #- "8080:8080"
     networks:
       - web
     volumes:
-      # allow Traefik to listen on docker socket 
+      # Allow traefik to listen on docker socket
       - "/var/run/docker.sock:/var/run/docker.sock"
-      # Lets Encrypt 
-      - "./acme.json:/acme.json"
+      # Lets Encrypt
+      - "./data/letsencrypt/acme.json:/letsencrypt/acme.json"
     labels:
-      #redirect http to https
-      - traefik.http.routers.http_catchall.rule=HostRegexp(`{any:.+}`)
-      - traefik.http.routers.http_catchall.entrypoints=web
-      - traefik.http.routers.http_catchall.middlewares=https_redirect
-      - traefik.http.middlewares.https_redirect.redirectscheme.scheme=https
-      - traefik.http.middlewares.https_redirect.redirectscheme.permanent=true
+      # Redirect all HTTP to HTTPS permanently
+      - "traefik.http.routers.http_catchall.rule=HostRegexp(`{any:.+}`)"
+      - "traefik.http.routers.http_catchall.entrypoints=web"
+      - "traefik.http.routers.http_catchall.middlewares=https_redirect"
+      - "traefik.http.middlewares.https_redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.https_redirect.redirectscheme.permanent=true"
+        #enable traefik auto discovery
+      - "traefik.enable=true"
+        #entry point for router
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+        #rule which router will route requests from
+      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
+        #enable tls for router
+      - "traefik.http.routers.traefik.tls=true"
+        #specify cert resolver for router
+      - "traefik.http.routers.traefik.tls.certresolver=leresolver"
+        #tell service which port (in container) to route trafic to
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
   db:
     build: db
@@ -61,9 +63,12 @@ services:
     labels:
       #disable traekfik auto discovery
       - "traefik.enable=false"
+
   api:
     build: api
     restart: always
+    networks:
+      - web
     labels:
         #enable traefik auto discovery
       - "traefik.enable=true"
@@ -78,18 +83,6 @@ services:
         #tell service which port (in container) to route trafic to
       - "traefik.http.services.api.loadbalancer.server.port=5000"
 
-  whoami:
-    image: "containous/whoami"
-    container_name: "simple-service"
-    restart: always
-    networks:
-      - web
-    labels:
-      - "traefik.http.routers.whoami.rule=Host(`jangui.dev`)"
-      - "traefik.http.routers.whoami.tls=true"
-      - "traefik.http.routers.whoami.tls.certresolver=leresolver"
-      - "traefik.http.middlewares.whoami.compress=true"
-      - "traefik.http.routers.whoami.middlewares=whoami@docker"
-
 networks:
-  web:
+    web:
+
