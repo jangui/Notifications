@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -xe
+
+gunicorn -b 0.0.0.0:5000 -w 8 --reload --capture-output --enable-stdio-inheritance --log-level debug src:app

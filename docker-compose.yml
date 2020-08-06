@@ -66,14 +66,14 @@ services:
     networks:
       - web
 
-  api:
-    build: api
+  tweet:
+    build: tweet
     restart: always
     networks:
       - web
-    links:
-      - db:db
-    depends_on: [db]
+    #links:
+    #- db:db
+    #depends_on: [db]
     volumes:
       - "./data/keys:/keys"
     labels:
@@ -82,7 +82,7 @@ services:
         #entry point for router
       - "traefik.http.routers.api.entrypoints=websecure"
         #rule which router will route requests from
-      - "traefik.http.routers.api.rule=Host(`notifications.jangui.dev`)"
+      - "traefik.http.routers.api.rule=Host(`tweet.jangui.dev`)"
         #enable tls for router
       - "traefik.http.routers.api.tls=true"
         #specify cert resolver for router

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -xe
+
+env FLASK_APP=dev.py flask run
