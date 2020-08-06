@@ -1,6 +1,0 @@
-#!/bin/sh
-
-set -xe
-
-python3 hello_world.py
-

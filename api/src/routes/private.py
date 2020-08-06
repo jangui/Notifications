@@ -4,11 +4,12 @@ from datetime import datetime
 
 private = Blueprint('private', __name__, url_prefix='/private')
 
+KEYFILE = "/keys"
+
 @private.route('/tweet/birthdays', methods=['POST'])
 def tweet_birthdays():
-    keyfile = "../data/keys"
     bds = get_birthdays()
-    bot = TweetBot(keyfile)
+    bot = TweetBot(KEYFILE)
     for key, value in bds.items():
         twt = "Today is " + key + "'s birithday!"
         if value != '':
@@ -20,15 +21,13 @@ def tweet_birthdays():
 def ping():
     print(request.json)
     time = str(datetime.now())
-    keyfile = "../data/keys"
-    bot = TweetBot(keyfile)
+    bot = TweetBot(KEYFILE)
     bot.tweet("PING " + time)
     return "success!"
 
 @private.route('/tweet/delete', methods=['POST'])
 def delete():
-    keyfile = "../data/keys"
-    bot = TweetBot(keyfile)
+    bot = TweetBot(KEYFILE)
     bot.delete_tweets()
     return "success!"
 

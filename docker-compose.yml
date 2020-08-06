@@ -63,12 +63,19 @@ services:
     labels:
       #disable traekfik auto discovery
       - "traefik.enable=false"
+    networks:
+      - web
 
   api:
     build: api
     restart: always
     networks:
       - web
+    links:
+      - db:db
+    depends_on: [db]
+    volumes:
+      - "./data/keys:/keys"
     labels:
         #enable traefik auto discovery
       - "traefik.enable=true"
