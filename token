@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+from secrets import token_hex
+
+def main():
+    filename = "./data/env"
+    token = False
+    new_data = []
+    with open(filename, 'r') as f:
+        data = f.read()
+        lines = data.split("\n")
+        for line in lines:
+            if line.find("=") != -1:
+                line = line.split(" ")
+                l = line[1].split("=")
+                if l[0] == 'TOKEN':
+                    l[1] = token_hex(32)
+                    token = True
+                new_data.append("export " + "=".join(l))
+            else:
+                new_data.append(line)
+
+    with open(filename, 'w') as f: 
+        f.write("\n".join(new_data))
+        if token == False:
+                print("export TOKEN="+token_hex(32), file=f)
+                
+if __name__ == "__main__":
+    main()

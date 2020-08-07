@@ -76,6 +76,9 @@ services:
     #depends_on: [db]
     volumes:
       - "./data/keys:/keys"
+    environment:
+      - MAX_TWEET=280
+      - TOKEN=${TOKEN}
     labels:
         #enable traefik auto discovery
       - "traefik.enable=true"
